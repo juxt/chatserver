@@ -1,6 +1,6 @@
 (defproject chatserver "0.1.0-SNAPSHOT"
-  :description "A modular project created with lein new modular sse"
-  :url "http://github.com/malcolmsparks/chatserver"
+  :description "A chatserver"
+  :url "http://github.com/juxt/chatserver"
 
   :exclusions [com.stuartsierra/component]
 

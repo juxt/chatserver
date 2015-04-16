@@ -1,6 +1,8 @@
 # chatserver
 
-To demonstrate an asynchronous chatserver using yada
+To demonstrate an asynchronous chatserver using yada's server-sent-events
+
+Also see https://github.com/juxt/chatclient
 
 ## Usage
 
