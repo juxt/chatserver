@@ -1,20 +1,20 @@
-(ns sseproj.main
+(ns chatserver.main
   "Main entry point"
   (:require clojure.pprint)
   (:gen-class))
 
 (defn -main [& args]
   ;; We eval so that we don't AOT anything beyond this class
-  (eval '(do (require 'sseproj.system)
-             (require 'sseproj.main)
+  (eval '(do (require 'chatserver.system)
+             (require 'chatserver.main)
              (require 'com.stuartsierra.component)
 
              (require 'clojure.java.browse)
 
-             (println "Starting sseproj")
+             (println "Starting chatserver")
 
              (let [system (->
-                           (sseproj.system/new-production-system)
+                           (chatserver.system/new-production-system)
                            com.stuartsierra.component/start)]
 
                (println "System started")

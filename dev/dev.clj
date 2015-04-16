@@ -6,7 +6,7 @@
    [clojure.tools.namespace.repl :refer (refresh refresh-all)]
    [clojure.java.io :as io]
    [com.stuartsierra.component :as component]
-   [sseproj.system :refer (config new-system-map new-dependency-map new-co-dependency-map)]
+   [chatserver.system :refer (config new-system-map new-dependency-map new-co-dependency-map)]
    [modular.maker :refer (make)]
    [modular.wire-up :refer (normalize-dependency-map)]
    [clojure.core.async :as a]))
@@ -68,3 +68,6 @@
 (defn path-for [path & args]
   (apply modular.bidi/path-for
          (-> system :modular-bidi-router-webrouter) path args))
+
+;; ~/chatserver/dev/dev.clj
+(defn get-channel [] (-> system :sse-demo-events-events :channel))

@@ -1,4 +1,4 @@
-(ns sseproj.website
+(ns chatserver.website
   (:require
    [clojure.core.async :refer (go >! <! buffer dropping-buffer sliding-buffer chan take!)]
    [clojure.pprint :refer (pprint)]

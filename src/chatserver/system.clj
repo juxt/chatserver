@@ -1,4 +1,4 @@
-(ns sseproj.system
+(ns chatserver.system
   "Components and their dependency relationships"
   (:refer-clojure :exclude (read))
   (:require
@@ -10,8 +10,8 @@
    [modular.maker :refer (make)]
    [modular.bidi :refer (new-router new-web-resources)]
    [modular.aleph :refer (new-webserver)]
-   [sseproj.events :refer (new-events-website)]
-   [sseproj.website :refer (new-website)]))
+   [chatserver.events :refer (new-events-website)]
+   [chatserver.website :refer (new-website)]))
 
 (defn ^:private read-file
   [f]
@@ -29,11 +29,11 @@
 
 (defn ^:private user-config
   []
-  (config-from (io/file (System/getProperty "user.home") ".sseproj.edn")))
+  (config-from (io/file (System/getProperty "user.home") ".chatserver.edn")))
 
 (defn ^:private config-from-classpath
   []
-  (if-let [res (io/resource "sseproj.edn")]
+  (if-let [res (io/resource "chatserver.edn")]
     (config-from (io/file res))
     {}))
 
@@ -44,23 +44,17 @@
   (merge (config-from-classpath)
          (user-config)))
 
-
 (defn http-listener-components
   [system config]
   (assoc system
     :http-listener-listener
-    (->
-      (new-webserver :port 3001 )
-      (using []))))
+    (new-webserver :port 3001)))
 
 (defn modular-bidi-router-components
   [system config]
   (assoc system
     :modular-bidi-router-webrouter
-    (->
-      (make new-router config)
-      (using []))))
-
+    (make new-router config)))
 
 (defn jquery-components
   "Serve JQuery resources from a web-jar."

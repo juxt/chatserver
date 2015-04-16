@@ -1,17 +1,17 @@
-(defproject sseproj "0.1.0-SNAPSHOT"
+(defproject chatserver "0.1.0-SNAPSHOT"
   :description "A modular project created with lein new modular sse"
-  :url "http://github.com/malcolmsparks/sseproj"
+  :url "http://github.com/malcolmsparks/chatserver"
 
   :exclusions [com.stuartsierra/component]
 
   :dependencies
   [
    [hiccup "1.0.5"]
-   [yada "0.2.3"]
-   [com.stuartsierra/component "0.2.2"]
+      [com.stuartsierra/component "0.2.2"]
    [juxt.modular/bidi "0.9.1"]
    #_[juxt.modular/http-kit "0.5.4"]
    [juxt.modular/aleph "0.0.8"]
+   [yada "0.2.3"]
    [juxt.modular/maker "0.5.0"]
    [juxt.modular/wire-up "0.5.0"]
    [org.clojure/clojure "1.7.0-alpha4"]
@@ -27,12 +27,11 @@
    [ch.qos.logback/logback-classic "1.0.7" :exclusions [org.slf4j/slf4j-api]]
    ]
 
-  :main sseproj.main
+  :main chatserver.main
 
   :repl-options {:init-ns user
                  :welcome (println "Type (dev) to start")}
 
-  :aliases {"gen" ["run" "-m" "sseproj.generate"]}
 
   :profiles {:dev {:dependencies [[org.clojure/tools.namespace "0.2.5"]]
                    :source-paths ["dev"

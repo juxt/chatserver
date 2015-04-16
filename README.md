@@ -1,6 +1,6 @@
-# sseproj
+# chatserver
 
-To demonstrate asynchronous HTTP services in Clojure
+To demonstrate an asynchronous chatserver using yada
 
 ## Usage
 

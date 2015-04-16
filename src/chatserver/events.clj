@@ -1,4 +1,4 @@
-(ns sseproj.events
+(ns chatserver.events
   (:require
    [clojure.core.async :as async :refer (go go-loop >! <! buffer dropping-buffer sliding-buffer chan put! mult tap)]
    [clojure.java.io :as io]
@@ -48,16 +48,15 @@
               [:script (slurp (io/resource "events.js"))]]])}))
 
 (defn post-to-channel [{:keys [messages channel]}]
-  (yada :post
-        (fn [ctx]
-          (let [req (:request ctx)]
-            (let [msg (slurp (:body req))]
-              (do
-                (swap! messages conj msg)
-                (infof "Putting message: %s" msg)
-                (put! channel msg)
-                {:status 200 :body "Thank you"}))))))
+  (fn [req]
+    (let [msg (slurp (:body req))]
+      (swap! messages conj msg)
+      (put! channel msg)
+      {:status 200
+       :headers {"access-control-allow-origin" "*"}
+       :body "Thank you"})))
 
+;; Original http-kit implementation, commented out now we're using aleph+yada
 #_(defn server-event-source
   "Take a mult and return a handler that will produce HTML5 server-sent
   event (SSE) streams"
@@ -75,7 +74,14 @@
                         :headers {"Content-Type" "text/event-stream"}} false)
         (go-loop []
           (when-let [data (<! ch)]
+
+            ;; WARNING: Calls to httpkit/send! will not block, so
+            ;; httpkit's queue will grow until we run out of memory -
+            ;; there is no back pressure here, see here for discussion:
+            ;; https://groups.google.com/forum/#!topic/clojure/DbBzM3AG9wM
+            ;; This is why we have moved from httpkit to aleph+yada
             (httpkit/send! browser-connection (str "data: " data "\r\n\r\n") false)
+
             (recur)))))))
 
 ;; Components are defined using defrecord.
@@ -105,12 +111,11 @@
       "events" (handler ::events (yada
                                   :allow-origin true
                                   :events (fn [ctx]
-                                            (infof "SSE events here")
                                             (let [ch (chan 256)]
                                               (tap (:mult component) ch)
                                               (go (>! ch "First message!"))
                                               ch)
-                                            )) #_(server-event-source (:mult component)))}]))
+                                            )))}]))
 
 ;; While not mandatory, it is common to use a function to construct an
 ;; instance of the component. This affords the opportunity to control
